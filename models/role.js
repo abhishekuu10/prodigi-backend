@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ User, Permission }) {
+    static associate({ User, Permission, RolePermission }) {
       // define association here
 
       this.hasMany(User, {
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsToMany(Permission, {
-        through: "RolePermission",
+        through: RolePermission,
         as: "permission",
         foreignKey: "roleName",
       });
@@ -24,8 +24,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   Role.init(
     {
-      roleName: DataTypes.STRING,
-      roleDesciption: DataTypes.STRING,
+      roleName: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      roleDescription: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,

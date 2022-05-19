@@ -1,27 +1,33 @@
-'use strict';
+"use strict";
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Wishlists', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
+  async up(queryInterface, DataTypes) {
+    await queryInterface.createTable("Wishlists", {
+      userId: {
+        type: DataTypes.INTEGER,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        allowNull: false,
       },
       listName: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false,
+        primaryKey: true,
+      },
+      productId: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: DataTypes.DATE,
+      },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Wishlists');
-  }
+  async down(queryInterface, DataTypes) {
+    await queryInterface.dropTable("Wishlists");
+  },
 };

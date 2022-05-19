@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
       },
+      productId: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
+      },
     },
     {
       sequelize,

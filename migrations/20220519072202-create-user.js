@@ -1,39 +1,50 @@
-'use strict';
+"use strict";
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+  async up(queryInterface, DataTypes) {
+    await queryInterface.createTable("Users", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER,
       },
       username: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
       },
       name: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       password: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       email: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      roleId: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
       },
       refreshToken: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: DataTypes.DATE,
+      },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
-  }
+  async down(queryInterface, DataTypes) {
+    await queryInterface.dropTable("Users");
+  },
 };

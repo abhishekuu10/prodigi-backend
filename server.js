@@ -43,7 +43,7 @@ app.use((req, res) => {
 
 const httpServer = http.createServer(app);
 db.sequelize
-  .sync(true)
+  .sync({ alter: true })
   .then(() => {
     console.log("Database is connected");
     httpServer.listen(8050, () =>

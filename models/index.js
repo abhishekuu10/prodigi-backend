@@ -42,4 +42,12 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.Product = require("./product")(sequelize, Sequelize);
+db.User = require("./user")(sequelize, Sequelize);
+db.Role = require("./role")(sequelize, Sequelize);
+db.Permission = require("./permission")(sequelize, Sequelize);
+db.RolePermission = require("./rolePermission")(sequelize, Sequelize);
+db.Wishlist = require("./wishlist")(sequelize, Sequelize);
+db.WishlistProduct = require("./wishlistProduct")(sequelize, Sequelize);
+
 module.exports = db;
