@@ -8,12 +8,12 @@ module.exports = {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      roleName: {
+      roleId: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
-      permName: {
+      permId: {
         type: DataTypes.STRING,
         allowNull: false,
       },

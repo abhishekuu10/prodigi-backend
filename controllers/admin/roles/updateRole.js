@@ -1,33 +1,39 @@
 const db = require("../../../models");
 const Role = db.Role;
-const RolePermission = db.RolePermission;
-const Permission = db.Permission;
 
 const CheckPermission = require("../../auth/checkPermission");
 
-const getRole = async (req, res) => {
+const updateRole = async (req, res) => {
   try {
+    const roleId = req.roleId;
+    const { role_id } = req.query;
     const { roleName, roleDescription } = req.body;
-    // const checkPermission = CheckPermission(role_Name, "get_role");
+    const checkPermission = CheckPermission(roleId, "update_role");
 
     // if (checkPermission) {
     const role = await Role.findOne({
       where: {
-        roleName,
+        id: role_id,
       },
     });
     if (role) {
-      const roleUpdate = await Role.update({
-        roleName: roleName || role.datavalues.roleName,
-        roleDescription: roleDescription || role.datavalues.roleDescription,
+      await Role.update(
+        {
+          roleName: roleName || role.dataValues.roleName,
+          roleDescription: roleDescription || role.dataValues.roleDescription,
+        },
+        {
+          where: {
+            id: roleId,
+          },
+        }
+      );
+
+      res.json({
+        status: true,
+        msg: `role ${roleName} updated`,
       });
     }
-
-    res.json({
-      status: true,
-      msg: "role updated",
-      Role: role,
-    });
     // }
   } catch (err) {
     console.log(err);
@@ -38,4 +44,4 @@ const getRole = async (req, res) => {
   }
 };
 
-module.exports = getRole;
+module.exports = updateRole;

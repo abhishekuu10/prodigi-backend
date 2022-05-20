@@ -9,14 +9,14 @@ const getPermission = async (req, res) => {
   try {
     const checkPermission = CheckPermission(roleId, "get_Permission");
 
-    if (checkPermission) {
-      const permission = await Permission.findAll({});
+    // if (checkPermission) {
+    const permission = await Permission.findAll({});
 
-      return res.json({
-        status: true,
-        permission,
-      });
-    }
+    return res.json({
+      status: true,
+      permission,
+    });
+    // }
   } catch (err) {
     console.log(err);
     res.status(500).json({

@@ -23,15 +23,23 @@ const {
 
 const authCheck = require("../../middlewares/authCheck");
 
-router.post("/product", authCheck, addProduct);
-router.put("/product", authCheck, updateProduct);
-router.get("/mostwishlisted", authCheck, mostWishlistedProduct);
-router.get("/mostviewed", authCheck, mostViewedProduct);
+router.use(authCheck);
+// product routes
+router.post("/product", addProduct);
+router.put("/product", updateProduct);
+router.get("/mostwishlisted", mostWishlistedProduct);
+router.get("/mostviewed", mostViewedProduct);
 
-router.post("/roles", createRole);
+// role routes
 router.get("/roles", getRole);
+router.post("/roles", createRole);
+router.put("/roles", updateRole);
+router.delete("/roles", deleteRole);
 
-router.post("/permissions", createPermission);
+// permission routes
 router.get("/permissions", getPermission);
+router.post("/permissions", createPermission);
+router.put("/permissions", updatePermission);
+router.delete("/permissions", deletePermission);
 
 module.exports = { router };

@@ -85,7 +85,7 @@ const addToWishList = async (req, res) => {
 
 const getWishList = async (req, res) => {
   try {
-    const username = req.user;
+    const username = req.username;
 
     const user = await User.findOne({
       where: {
@@ -103,7 +103,7 @@ const getWishList = async (req, res) => {
 
     res.status(200).json({
       status: true,
-      wish_List: wishlist,
+      wishlist,
     });
   } catch (err) {
     console.log(err);
@@ -119,6 +119,8 @@ const deletewishlist = async (req, res) => {
   const { productId } = req.query;
   const { listName } = req.body;
 
+  console.log(productId);
+
   try {
     const list = await Wishlist.findOne({
       where: {
@@ -132,8 +134,9 @@ const deletewishlist = async (req, res) => {
       });
     }
 
-    if (!productId) {
-      console.log("inside");
+    console.log("here");
+
+    if (productId == null) {
       await Wishlist.destroy({
         where: {
           listName,
@@ -148,7 +151,7 @@ const deletewishlist = async (req, res) => {
     await Wishlist.destroy({
       where: {
         listName,
-        productid,
+        productId,
       },
     });
 

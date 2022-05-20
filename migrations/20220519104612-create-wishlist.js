@@ -10,17 +10,14 @@ module.exports = {
       },
       userId: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         allowNull: false,
       },
       listName: {
         type: DataTypes.STRING,
-        primaryKey: true,
         allowNull: false,
-        primaryKey: true,
       },
       productId: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       createdAt: {

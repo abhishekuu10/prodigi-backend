@@ -1,25 +1,33 @@
 const db = require("../../../models");
 const Permission = db.Permission;
-const RolePermission = db.RolePermission;
 const CheckPermission = require("../../auth/checkPermission");
 
 const updatePermission = async (req, res) => {
   const roleId = req.roleId;
+  const { permId } = req.query;
   const { permName, permDescription } = req.body;
   try {
-    const checkPermission = CheckPermission(roleId, "update_permission");
+    // const checkPermission = CheckPermission(roleId, "update_permission");
 
-    if (checkPermission) {
-      const permission = Permission.create({
+    // if (checkPermission) {
+    const permission = Permission.update(
+      {
         permName,
         permDescription,
-      });
+      },
+      {
+        returning: true,
+        where: {
+          id: permId,
+        },
+      }
+    );
 
-      return res.json({
-        status: true,
-        permission,
-      });
-    }
+    return res.json({
+      status: true,
+      permission,
+    });
+    // }
   } catch (err) {
     console.log(err);
     res.status(500).json({

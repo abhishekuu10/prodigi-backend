@@ -11,28 +11,28 @@ const createPermission = async (req, res) => {
   try {
     const checkPermission = CheckPermission(roleId, "create_permission");
 
-    if (checkPermission) {
-      const permission = await Permission.create({
-        permName,
-        permDescription,
-      });
+    // if (checkPermission) {
+    const permission = await Permission.create({
+      permName,
+      permDescription,
+    });
 
-      const role = await Role.findOne({
-        where: {
-          roleName: role_name,
-        },
-      });
+    const role = await Role.findOne({
+      where: {
+        roleName: role_name,
+      },
+    });
 
-      const rolePermission = await RolePermission.create({
-        permId: permission.dataValues.id,
-        roleId: role.dataValues.id,
-      });
+    const rolePermission = await RolePermission.create({
+      permId: permission.dataValues.id,
+      roleId: role.dataValues.id,
+    });
 
-      return res.json({
-        status: true,
-        permission,
-      });
-    }
+    return res.json({
+      status: true,
+      permission,
+    });
+    // }
   } catch (err) {
     console.log(err);
     res.status(500).json({

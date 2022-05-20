@@ -13,14 +13,18 @@ const {
   wishlist,
 } = require("../../controllers/user");
 
+// user general routes
 router.get("/products", getProducts);
 router.get("/searchproducts/", searchProducts); //
 
 router.post("/signup", signUp);
 router.post("/login", login);
 
-router.post("/products/wishlist", authCheck, wishlist.addToWishList);
-router.get("/products/wishlist", authCheck, wishlist.getWishList);
-router.delete("/products/wishlist", authCheck, wishlist.deletewishlist);
+// user authenticated routes
+router.use(authCheck);
+
+router.post("/products/wishlist", wishlist.addToWishList);
+router.get("/products/wishlist", wishlist.getWishList);
+router.delete("/products/wishlist", wishlist.deletewishlist);
 
 module.exports = { router };

@@ -3,22 +3,18 @@ const Product = db.Product;
 const Sequelize = require("sequelize");
 
 const searchProducts = async (req, res) => {
-  const { name, brand, type, discount, price } = req.query;
+  var { name, brand, discount } = req.query;
   try {
     const product = await Product.findAll({
       logging: false,
       where: {
-        prod_name: { [Sequelize.Op.like]: `%${name}%` },
-        // prod_brand: brand,
-        // prod_discount: discount,
-        // prod_price: price,
+        name: { [Sequelize.Op.like]: `%${name}%` },
+        // brand: brand || null,
+        // discount: discount || null,
       },
       limit: 10,
     });
-    const viewCount = await Product.update({
-      prod_views: pr,
-    });
-    console.log(product);
+
     res.status(200).json({
       status: true,
       products: product,

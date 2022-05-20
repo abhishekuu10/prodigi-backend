@@ -1,25 +1,39 @@
 const db = require("../../../models");
 const Permission = db.Permission;
-const RolePermission = db.RolePermission;
 const CheckPermission = require("../../auth/checkPermission");
 
 const deletePermission = async (req, res) => {
-  const { role_Name } = req.roleName;
-  const { permName, permDescription } = req.body;
+  const roleId = req.roleId;
+  const { permName } = req.body;
   try {
-    const checkPermission = CheckPermission(role_Name, "create_permission");
+    const checkPermission = CheckPermission(roleId, "delete_permission");
 
-    if (checkPermission) {
-      const permission = Permission.create({
+    // if (checkPermission) {
+
+    const permission = await Permission.findOne({
+      where: {
         permName,
-        permDescription,
+      },
+    });
+
+    if (permission) {
+      await Permission.destroy({
+        where: {
+          permName,
+        },
       });
 
-      res.json({
+      return res.status(200).json({
         status: true,
-        permission,
+        msg: `${permName} permission deleted`,
       });
     }
+    res.status(404).json({
+      status: false,
+      msg: `${permName} permission not found`,
+    });
+
+    // }
   } catch (err) {
     console.log(err);
     res.status(500).json({

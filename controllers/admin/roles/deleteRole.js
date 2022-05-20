@@ -1,14 +1,13 @@
 const db = require("../../../models");
 const Role = db.Role;
-const RolePermission = db.RolePermission;
-const Permission = db.Permission;
 
 const CheckPermission = require("../../auth/checkPermission");
 
 const deleteRole = async (req, res) => {
   try {
-    const { roleName } = req.query;
-    // const checkPermission = CheckPermission(role_Name, "get_role");
+    const roleId = req.roleId;
+    const { roleName } = req.body;
+    const checkPermission = CheckPermission(roleId, "delete_role");
 
     // if (checkPermission) {
     const role = await Role.findOne({
@@ -24,7 +23,7 @@ const deleteRole = async (req, res) => {
         },
       });
 
-      res.json({
+      return res.json({
         status: true,
         msg: `${roleName} role deleted`,
       });
@@ -34,7 +33,6 @@ const deleteRole = async (req, res) => {
       status: false,
       msg: `${roleName} role not found`,
     });
-
     // }
   } catch (err) {
     console.log(err);

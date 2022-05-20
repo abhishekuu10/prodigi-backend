@@ -2,7 +2,7 @@ const db = require("../../models");
 const Product = db.Product;
 
 const getProducts = async (req, res) => {
-  const { id } = req.query;
+  const { id, page } = req.query;
   try {
     if (id) {
       const product = await Product.findOne({
@@ -10,14 +10,14 @@ const getProducts = async (req, res) => {
           id,
         },
       });
-      console.log(product.dataValues);
+      // console.log(product.dataValues);
       if (product) {
         await product.update({
-          prod_views: product.dataValues.prod_views + 1,
+          views: product.dataValues.views + 1,
         });
       }
 
-      res.status(200).json({
+      return res.status(200).json({
         status: true,
         products: product,
       });
@@ -26,7 +26,7 @@ const getProducts = async (req, res) => {
     const product = await Product.findAll({
       logging: false,
       limit: 10,
-      offset: (req.query.page - 1) * 10,
+      offset: (page - 1) * 10,
     });
     res.status(200).json({
       status: true,

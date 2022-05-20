@@ -3,11 +3,11 @@ const Role = db.Role;
 const CheckPermission = require("../../auth/checkPermission");
 
 const createRole = async (req, res) => {
-  //   const { role_Name } = req.roleName;
+  //   const  roleId = req.roleId;
   const { roleName, roleDescription } = req.body;
 
   try {
-    // const checkPermission = CheckPermission(role_Name, "create_role");
+    // const checkPermission = CheckPermission(roleId, "create_role");
 
     // if (checkPermission) {
     const role = await Role.create({
