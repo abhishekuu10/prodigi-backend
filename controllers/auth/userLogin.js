@@ -17,26 +17,18 @@ const login = async (req, res) => {
     });
 
     if (!user) {
-      res.status(500).json({
+      return res.status(500).json({
         status: false,
         msg: "invalid username or password",
       });
     }
-
-    const role = await Role.findOne({
-      where: {
-        id: user.dataValues.roleId,
-      },
-    });
-
-    const roleName = role.dataValues.roleName;
 
     if (await bcrypt.compare(password, user.dataValues.password)) {
       const accessToken = jwt.sign(
         {
           id: user.dataValues.id,
           username: user.dataValues.username,
-          roleName: roleName,
+          roleId: user.dataValues.roleId,
         },
         accessKey,
         { expiresIn: "1d" }
@@ -59,7 +51,7 @@ const login = async (req, res) => {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
-      res.status(200).json({
+      return res.status(200).json({
         status: true,
         accesstoken: accessToken,
       });

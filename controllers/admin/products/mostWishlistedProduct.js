@@ -1,16 +1,18 @@
-const db = require("../../models");
-const WishlistProduct = db.WishlistProduct;
+const db = require("../../../models");
+const Wishlist = db.WishlistProduct;
+const Sequelize = require("sequelize");
 
 const mostWishlistedProduct = async (req, res) => {
   try {
-    const wishlistProduct = await WishlistProduct.findAll({
-      order: [["count", "desc"]],
+    const productId = await Wishlist.count({
+      where: {
+        productId,
+      },
     });
 
-    console.log(wishlistProduct[0].dataValues);
     res.json({
       status: true,
-      product: wishlistProduct[0].dataValues,
+      // product: wishlistProduct[0].dataValues,
     });
   } catch (err) {
     res.json({

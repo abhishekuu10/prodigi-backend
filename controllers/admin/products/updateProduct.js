@@ -1,13 +1,14 @@
-const db = require("../../models");
+const db = require("../../../models");
 const Product = db.Product;
-const CheckPermission = require("../auth/checkPermission");
+const CheckPermission = require("../../auth/checkPermission");
 
 const updateProduct = async (req, res) => {
   const { productId } = req.query;
+  const roleId = req.roleId;
 
   var { name, price, description, image } = req.body;
 
-  const checkPermission = CheckPermission(req.user.role_id, "update_product");
+  const checkPermission = CheckPermission(roleId, "update_product");
 
   if (checkPermission) {
     try {
@@ -17,20 +18,19 @@ const updateProduct = async (req, res) => {
         },
       });
 
-      name = product.prod_name !== name ? name : product.prod_name;
-      price = product.prod_price !== price ? price : product.prod_price;
+      name = product.name !== name ? name : product.name;
+      price = product.price !== price ? price : product.price;
       description =
-        product.prod_description !== description
-          ? description
-          : product.prod_description;
-      image = product.prod_image !== image ? image : product.prod_image;
+        product.description !== description ? description : product.description;
+      image = product.image !== image ? image : product.image;
 
       const updatedProduct = await Product.update(
         {
-          prod_name: name,
-          prod_price: price,
-          prod_description: description,
-          prod_image: image,
+          name: name,
+          price: price,
+          description: description,
+          image: image,
+          discount,
         },
         {
           returning: true,

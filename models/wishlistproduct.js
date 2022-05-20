@@ -15,10 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
-      count: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
     },
     {
       sequelize,

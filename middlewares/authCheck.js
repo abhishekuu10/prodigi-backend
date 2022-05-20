@@ -16,9 +16,8 @@ const authCheck = (req, res, next) => {
     if (err) {
       res.sendStatus(403);
     }
-    req.user = decoded.username;
-
-    req.roleName = decoded.roleName;
+    req.username = decoded.username;
+    req.roleId = decoded.roleId;
 
     next();
   });

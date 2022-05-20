@@ -1,15 +1,17 @@
-const db = require("../../models");
+const db = require("../../../models");
 const Product = db.Product;
-const CheckPermission = require("../auth/checkPermission");
+const CheckPermission = require("../../auth/checkPermission");
 
 const addProduct = async (req, res) => {
-  const { roleName } = req.roleName;
+  const roleId = req.roleId;
   const { name, description, price, image, discount, brand } = req.body;
 
   try {
-    const checkPermission = CheckPermission(roleName, "add_product");
+    console.log("roleId add: ", roleId);
 
-    console.log(checkPermission);
+    const checkPermission = await CheckPermission(roleId, "add_product");
+
+    console.log("checkPermission: ", checkPermission);
 
     if (checkPermission) {
       const product = await Product.create({
@@ -21,12 +23,11 @@ const addProduct = async (req, res) => {
         price,
       });
 
-      res.json({
+      return res.json({
         status: true,
         product,
       });
     }
-
     res.json({
       status: false,
       msg: "forbidden",

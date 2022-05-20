@@ -2,6 +2,12 @@
 module.exports = {
   async up(queryInterface, DataTypes) {
     await queryInterface.createTable("Wishlists", {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       userId: {
         type: DataTypes.INTEGER,
         primaryKey: true,

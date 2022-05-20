@@ -12,6 +12,7 @@ const signUp = async (req, res) => {
     res.status(500).json({
       status: false,
       msg: result.msg,
+      roleId: 2,
     });
   }
   const { name, email, password, username } = req.body;
@@ -24,6 +25,7 @@ const signUp = async (req, res) => {
       email,
       username,
       password: hash,
+      roleId: 2,
     });
     return res.status(200).json({
       status: true,

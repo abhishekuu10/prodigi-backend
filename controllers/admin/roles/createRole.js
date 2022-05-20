@@ -1,6 +1,6 @@
-const db = require("../../models");
+const db = require("../../../models");
 const Role = db.Role;
-const CheckPermission = require("../auth/checkPermission");
+const CheckPermission = require("../../auth/checkPermission");
 
 const createRole = async (req, res) => {
   //   const { role_Name } = req.roleName;
@@ -15,7 +15,7 @@ const createRole = async (req, res) => {
       roleDescription,
     });
 
-    res.json({
+    res.status(200).json({
       status: true,
       Role: role,
     });

@@ -6,9 +6,9 @@ const WishlistProduct = db.WishlistProduct;
 const Validator = require("../auth/validation");
 
 const addToWishList = async (req, res) => {
-  const product_id = req.query.productId;
-  const username = req.user;
-  const { list_name } = req.body;
+  const productId = req.query.productId;
+  const username = req.username;
+  const { listName } = req.body;
 
   const validate = await Validator.wishlistValidator(req.body);
 
@@ -25,72 +25,53 @@ const addToWishList = async (req, res) => {
         username,
       },
     });
-
-    var wishlist = await Wishlist.findOne({
+    console;
+    const isWishlistExist = await Wishlist.findOne({
       where: {
-        user_id: user.dataValues.user_id,
-        list_name: list_name,
+        userId: user.dataValues.id,
+        listName,
       },
     });
 
-    var wishlistProduct = await WishlistProduct.findOne({
+    if (!isWishlistExist) {
+      const wishlist = await Wishlist.create({
+        userId: user.dataValues.id,
+        listName,
+        productId,
+      });
+
+      return res.status(200).json({
+        status: true,
+        msg: `wishlist ${listName} created `,
+        Wishlist: wishlist.dataValues,
+      });
+    }
+
+    const isProductExist = await Wishlist.findOne({
       where: {
-        product_id,
+        userId: user.dataValues.id,
+        listName,
+        productId,
       },
     });
 
-    if (!wishlistProduct) {
-      wishlistProduct = await WishlistProduct.create({
-        product_id,
-        count: 1,
-      });
-    } else {
-      await wishlistProduct.update({
-        count: wishlistProduct.dataValues.count + 1,
+    if (isProductExist) {
+      return res.status(409).json({
+        status: false,
+        msg: `product already exixt in ${listName}`,
       });
     }
 
-    if (!wishlist) {
-      wishlist = await Wishlist.create({
-        user_id: user.dataValues.user_id,
-        list_name,
-        product_id: [product_id],
-      });
+    const wishlist = await Wishlist.create({
+      userId: user.dataValues.id,
+      listName,
+      productId,
+    });
 
-      res.status(200).json({
-        status: true,
-        msg: `wish list ${list_name} created by user ${user.dataValues.user_id}`,
-        wishlist,
-      });
-    }
-
-    var arr = [...wishlist.dataValues.product_id];
-    if (!arr.includes(parseInt(product_id))) {
-      arr.push(product_id);
-    } else {
-      res.json({
-        status: true,
-        msg: `product with id ${product_id} already added to wish list`,
-        wish_list: wishlist.dataValues,
-      });
-    }
-
-    wishlist = await Wishlist.update(
-      {
-        product_id: arr,
-      },
-      {
-        where: {
-          list_name,
-          user_id: user.dataValues.user_id,
-        },
-      }
-    );
-
-    res.json({
+    return res.status(200).json({
       status: true,
-      msg: `product with id ${product_id} added to wish list`,
-      wish_list: wishlist[0].dataValues,
+      msg: `product with ${productId} added by ${user.dataValues.username} to wishlist ${listName}`,
+      wishlist: wishlist.dataValues,
     });
   } catch (err) {
     console.log(err);
@@ -114,7 +95,7 @@ const getWishList = async (req, res) => {
 
     const wishlist = await Wishlist.findAll({
       where: {
-        user_id: user.dataValues.user_id,
+        userId: user.dataValues.id,
       },
       limit: 2,
       offset: (req.query.page - 1) * 2,
@@ -136,26 +117,44 @@ const getWishList = async (req, res) => {
 
 const deletewishlist = async (req, res) => {
   const { productId } = req.query;
-  const { list_name } = req.body;
+  const { listName } = req.body;
 
   try {
-    const product = await Wishlist.findOne({
+    const list = await Wishlist.findOne({
       where: {
-        list_name: list_name,
+        listName,
       },
     });
-    var delProduct = product.dataValues.product_id;
-    var arr = delProduct.splice(delProduct.indexOf(productId), 1);
-    console.log(arr);
-    const wishlist = await Wishlist.update({
+    if (!list) {
+      return res.status(404).json({
+        status: false,
+        msg: "couldn't find wishlist",
+      });
+    }
+
+    if (!productId) {
+      console.log("inside");
+      await Wishlist.destroy({
+        where: {
+          listName,
+        },
+      });
+
+      return res.status(200).json({
+        status: true,
+        msg: ` wishlist ${listName} deleted`,
+      });
+    }
+    await Wishlist.destroy({
       where: {
-        product_id: delProduct,
+        listName,
+        productid,
       },
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       status: true,
-      wishlist,
+      msg: `product id ${productId} deleted in wishlist ${listName}`,
     });
   } catch (err) {
     res.status(500).json({

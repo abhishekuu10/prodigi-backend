@@ -1,21 +1,34 @@
-const db = require("../../models");
+const db = require("../../../models");
 const Permission = db.Permission;
+const Role = db.Role;
 const RolePermission = db.RolePermission;
-const CheckPermission = require("../auth/checkPermission");
+const CheckPermission = require("../../auth/checkPermission");
 
 const createPermission = async (req, res) => {
-  const { role_Name } = req.roleName;
+  const roleId = req.roleId;
+  const { role_name } = req.query;
   const { permName, permDescription } = req.body;
   try {
-    const checkPermission = CheckPermission(role_Name, "create_permission");
+    const checkPermission = CheckPermission(roleId, "create_permission");
 
     if (checkPermission) {
-      const permission = Permission.create({
+      const permission = await Permission.create({
         permName,
         permDescription,
       });
 
-      res.json({
+      const role = await Role.findOne({
+        where: {
+          roleName: role_name,
+        },
+      });
+
+      const rolePermission = await RolePermission.create({
+        permId: permission.dataValues.id,
+        roleId: role.dataValues.id,
+      });
+
+      return res.json({
         status: true,
         permission,
       });

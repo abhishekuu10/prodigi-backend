@@ -2,7 +2,7 @@ const db = require("../../models");
 const Permission = db.Permission;
 const RolePermission = db.RolePermission;
 
-const checkPermission = async (roleName, permName) => {
+const checkPermission = async (roleId, permName) => {
   try {
     const perm = await Permission.findOne({
       where: {
@@ -10,12 +10,13 @@ const checkPermission = async (roleName, permName) => {
       },
     });
     if (perm) {
-      const rolePerm = RolePermission.findOne({
+      const rolePerm = await RolePermission.findOne({
         where: {
-          roleName,
-          permName: perm.datavalues.permName,
+          roleId,
+          permId: perm.dataValues.id,
         },
       });
+      console.log("rolePerm: ", rolePerm);
       if (rolePerm) {
         return true;
       } else {

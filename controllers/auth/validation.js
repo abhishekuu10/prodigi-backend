@@ -10,7 +10,7 @@ const userSchema = yup.object().shape({
 });
 
 const wishlistSchema = yup.object().shape({
-  list_name: yup
+  listName: yup
     .string()
     .min(2, "to short")
     .max(40)

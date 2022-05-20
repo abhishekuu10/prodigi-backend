@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   RolePermission.init(
     {
-      roleName: {
-        type: DataTypes.STRING,
+      roleId: {
+        type: DataTypes.INTEGER,
       },
-      permName: {
-        type: DataTypes.STRING,
+      permId: {
+        type: DataTypes.INTEGER,
       },
     },
     {

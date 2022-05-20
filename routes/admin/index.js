@@ -5,10 +5,21 @@ const {
   mostWishlistedProduct,
   updateProduct,
   mostViewedProduct,
-} = require("../../controllers/admin/index");
+} = require("../../controllers/admin/products/index");
 
-const createRole = require("../../controllers/role/createRole");
-const getRole = require("../../controllers/role/getRole");
+const {
+  getRole,
+  createRole,
+  updateRole,
+  deleteRole,
+} = require("../../controllers/admin/roles");
+
+const {
+  getPermission,
+  createPermission,
+  updatePermission,
+  deletePermission,
+} = require("../../controllers/admin/permissions");
 
 const authCheck = require("../../middlewares/authCheck");
 
@@ -19,5 +30,8 @@ router.get("/mostviewed", authCheck, mostViewedProduct);
 
 router.post("/roles", createRole);
 router.get("/roles", getRole);
+
+router.post("/permissions", createPermission);
+router.get("/permissions", getPermission);
 
 module.exports = { router };

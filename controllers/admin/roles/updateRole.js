@@ -1,9 +1,9 @@
-const db = require("../../models");
+const db = require("../../../models");
 const Role = db.Role;
 const RolePermission = db.RolePermission;
 const Permission = db.Permission;
 
-const CheckPermission = require("../auth/checkPermission");
+const CheckPermission = require("../../auth/checkPermission");
 
 const getRole = async (req, res) => {
   try {
@@ -25,6 +25,7 @@ const getRole = async (req, res) => {
 
     res.json({
       status: true,
+      msg: "role updated",
       Role: role,
     });
     // }

@@ -1,10 +1,10 @@
-const db = require("../../models");
+const db = require("../../../models");
 const Product = db.Product;
 
 const mostViewedProduct = async (req, res) => {
   try {
     const product = await Product.findAll({
-      order: [["prod_views", "desc"]],
+      order: [["views", "desc"]],
     });
 
     res.json({

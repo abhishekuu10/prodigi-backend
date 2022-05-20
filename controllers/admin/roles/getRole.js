@@ -1,20 +1,22 @@
 const db = require("../../../models");
+const Role = db.Role;
 const RolePermission = db.RolePermission;
 const Permission = db.Permission;
 
 const CheckPermission = require("../../auth/checkPermission");
 
-const getPermission = async (req, res) => {
-  const roleId = req.roleId;
+const getRole = async (req, res) => {
   try {
-    const checkPermission = CheckPermission(roleId, "get_Permission");
+    const checkPermission = CheckPermission(roleId, "get_role");
 
     if (checkPermission) {
-      const permission = await Permission.findAll({});
+      const role = await Role.findAll({
+        // include: ["user"],
+      });
 
-      return res.json({
+      res.json({
         status: true,
-        permission,
+        Role: role,
       });
     }
   } catch (err) {
@@ -26,4 +28,4 @@ const getPermission = async (req, res) => {
   }
 };
 
-module.exports = getPermission;
+module.exports = getRole;
