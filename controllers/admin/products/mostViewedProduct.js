@@ -7,9 +7,15 @@ const mostViewedProduct = async (req, res) => {
       order: [["views", "desc"]],
     });
 
+    const views = product[0].dataValues.views;
+
+    const arr = product.filter((x) => {
+      return x.dataValues.views == views;
+    });
+
     res.json({
       status: true,
-      product: product[0].dataValues,
+      product: arr,
     });
   } catch (err) {
     res.json({

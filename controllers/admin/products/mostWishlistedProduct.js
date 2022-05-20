@@ -1,18 +1,33 @@
 const db = require("../../../models");
 const Wishlist = db.WishlistProduct;
 const Sequelize = require("sequelize");
+const { QueryTypes } = require("sequelize");
 
 const mostWishlistedProduct = async (req, res) => {
   try {
-    const productId = await Wishlist.count({
-      where: {
-        productId,
-      },
+    const [results, metadata] = await db.sequelize.query(
+      `SELECT "productId",COUNT("productId")  
+      FROM "Wishlists" 
+      GROUP BY "productId";`
+    );
+
+    var count = 0;
+    const arr = results.reduce((acc, curr) => {
+      if (curr.count > count) {
+        count = curr.count;
+        acc = curr;
+      }
+      return acc;
+    }, {});
+
+    count = arr.count;
+    var ans = results.filter((x) => {
+      return x.count === count;
     });
 
     res.json({
       status: true,
-      // product: wishlistProduct[0].dataValues,
+      product: ans,
     });
   } catch (err) {
     res.json({

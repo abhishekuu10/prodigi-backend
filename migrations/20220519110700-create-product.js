@@ -11,7 +11,6 @@ module.exports = {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       brand: {
         type: DataTypes.STRING,
@@ -28,6 +27,10 @@ module.exports = {
       price: {
         type: DataTypes.INTEGER,
         allowNull: false,
+      },
+      views: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
       },
       discount: {
         type: DataTypes.INTEGER,
